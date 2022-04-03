@@ -1,0 +1,61 @@
+{
+  "name": "@herteleo/peekaboo",
+  "displayName": "Peekaboo",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "author": {
+    "name": "Leonard Hertel",
+    "email": "leonard.hertel@gmail.com",
+    "url": "https://herteleo.de"
+  },
+  "homepage": "https://herteleo.github.io/peekaboo/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/herteleo/peekaboo.git"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "gitHooks": {
+    "commit-msg": "commitlint -e"
+  },
+  "dependencies": {
+    "@vueuse/components": "^7.5.1",
+    "@vueuse/core": "^7.5.1",
+    "highlight.js": "^11.4.0",
+    "iconoir": "^1.0.0",
+    "marked": "^4.0.12",
+    "slugify": "^1.6.5",
+    "vue": "^3.2.31",
+    "vue-router": "^4.0.14"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
+    "@rushstack/eslint-patch": "^1.1.1",
+    "@tailwindcss/typography": "^0.5.2",
+    "@types/marked": "^4.0.2",
+    "@types/node": "^16.11.26",
+    "@types/wicg-file-system-access": "^2020.9.5",
+    "@vitejs/plugin-vue": "^2.2.4",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-typescript": "^10.0.0",
+    "@vue/tsconfig": "^0.1.3",
+    "autoprefixer": "^10.4.1",
+    "eslint": "^8.12.0",
+    "eslint-plugin-vue": "^8.5.0",
+    "postcss": "^8.4.5",
+    "prettier": "^2.6.1",
+    "prettier-plugin-tailwindcss": "^0.1.8",
+    "tailwindcss": "^3.0.8",
+    "typescript": "^4.6.3",
+    "vite": "^2.8.6",
+    "vite-plugin-pwa": "^0.11.13",
+    "vite-svg-loader": "^3.1.2",
+    "vue-tsc": "^0.33.9",
+    "yorkie": "^2.0.0"
+  }
+}
