@@ -2,7 +2,7 @@
   "name": "@herteleo/peekaboo",
   "displayName": "Peekaboo",
   "description": "Open a local folder and explore your files inside the browser.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "private": true,
   "author": {
