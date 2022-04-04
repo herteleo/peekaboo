@@ -18,6 +18,7 @@ export default defineConfig(({ mode }) => {
         includeAssets: ['favicon.png'],
         manifest: {
           name: displayName,
+          short_name: displayName,
           background_color: colors.gray['900'],
           theme_color: '#04060a',
           icons: [
