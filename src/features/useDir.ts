@@ -1,6 +1,7 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 import slugify from 'slugify';
+import type router from '@/router';
 
 interface CurrentDirEntryBase {
   handle: FileSystemHandle;
@@ -138,6 +139,21 @@ export const activateEntryRelativeToActive = (relativeIndex: number) => {
   }
 };
 
+const loadCurrentDir = async (dir = currentDir.value) => {
+  if (!dir) return;
+
+  currentDirEntriesLoading.value = true;
+  const entries = await setupDirEntries(dir);
+  currentDirEntries.value = [];
+  await nextTick();
+  currentDirEntries.value = entries;
+  currentDirEntriesLoading.value = false;
+};
+
+export const reloadCurrentDir = () => {
+  loadCurrentDir();
+};
+
 const useDir = () => {
   const route = useRoute();
   const router = useRouter();
@@ -153,19 +169,7 @@ const useDir = () => {
     () => router.push({ name: 'Files' })
   );
 
-  watch(
-    () => currentDir.value,
-    async (dir) => {
-      if (!dir) return;
-
-      currentDirEntriesLoading.value = true;
-      const entries = await setupDirEntries(dir);
-      currentDirEntries.value = [];
-      await nextTick();
-      currentDirEntries.value = entries;
-      currentDirEntriesLoading.value = false;
-    }
-  );
+  watch(() => currentDir.value, loadCurrentDir);
 
   watch(
     () => route.params.path,

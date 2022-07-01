@@ -9,4 +9,5 @@ export * as Music1 from 'iconoir/icons/music-1.svg?component';
 export * as NavArrowRight from 'iconoir/icons/nav-arrow-right.svg?component';
 export * as NavArrowLeft from 'iconoir/icons/nav-arrow-left.svg?component';
 export * as Page from 'iconoir/icons/page.svg?component';
+export * as Refresh from 'iconoir/icons/refresh.svg?component';
 export * as TextAlt from 'iconoir/icons/text-alt.svg?component';

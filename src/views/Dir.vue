@@ -8,6 +8,7 @@ import useDir, {
   currentDirEntries,
   currentDirEntriesLoading,
   getDirCoverEntry,
+  reloadCurrentDir,
 } from '@/features/useDir';
 
 useDir();
@@ -55,6 +56,9 @@ const dirThumbSrc = computed(
       <div class="animate-spin" v-if="currentDirEntriesLoading">
         <app-icon class="-scale-x-100" name="AirplaneRotation" />
       </div>
+      <button @click="reloadCurrentDir">
+        <app-icon name="Refresh" />
+      </button>
       <button @click="setRootDir">
         <app-icon name="Folder" />
       </button>
