@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/herteleo/peekaboo/compare/v1.0.1...v1.1.0) (2022-07-01)
+
+
+### Features
+
+* add refresh button for current directory ([636e1a2](https://github.com/herteleo/peekaboo/commit/636e1a2331038626f3a3ebe640e9fb90a1fb0e52))
+
 ### [1.0.1](https://github.com/herteleo/peekaboo/compare/v1.0.0...v1.0.1) (2022-04-04)
 
 
