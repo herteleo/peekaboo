@@ -1,5 +1,7 @@
+export * as AreaSearch from 'iconoir/icons/area-search.svg?component';
 export * as AirplaneRotation from 'iconoir/icons/airplane-rotation.svg?component';
 export * as EmptyPage from 'iconoir/icons/empty-page.svg?component';
+export * as Filter from 'iconoir/icons/filter.svg?component';
 export * as Folder from 'iconoir/icons/folder.svg?component';
 export * as GlassEmpty from 'iconoir/icons/glass-empty.svg?component';
 export * as JournalPage from 'iconoir/icons/journal-page.svg?component';
