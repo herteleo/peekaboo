@@ -1,8 +1,0 @@
-{
-  "extends": "@vue/tsconfig/tsconfig.node.json",
-  "include": ["shim.d.ts", "package.json", "vite.config.*"],
-  "compilerOptions": {
-    "composite": true,
-    "types": ["node"]
-  }
-}

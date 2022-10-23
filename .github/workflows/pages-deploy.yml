@@ -16,7 +16,7 @@ jobs:
           VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
         run: |
           npm ci
-          npm run build
+          npm run build-only
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.2.5
