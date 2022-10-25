@@ -14,8 +14,24 @@ import useDirFilter from '@/features/useDirFilter';
 
 useDir();
 
-const { filteredDirEntries, showFilter, stringFilter, resetFilter, toggleFilter } =
-  useDirFilter(currentDirEntries);
+const {
+  showFilter,
+  resetFilter,
+  toggleFilter,
+
+  filteredDirEntries,
+  stringFilter,
+
+  getTagsFromString,
+  isTagInFilter,
+  removeTagsFromString,
+  resetTagFilter,
+  tagFilter,
+  tagFilterOptions,
+  toggleTag,
+  isUntaggedActive,
+  toggleUntagged,
+} = useDirFilter(currentDirEntries);
 
 const $stringFilter = ref<HTMLInputElement>();
 
@@ -65,7 +81,13 @@ const dirThumbSrc = computed(
     <div
       class="flex items-center justify-between bg-black/75 px-4 py-1 text-gray-400 backdrop-blur"
     >
-      <div v-text="currentDir?.name" />
+      <div class="flex flex-wrap items-baseline gap-4">
+        <span v-text="removeTagsFromString(currentDir?.name || '')" />
+        <span
+          class="text-sm text-slate-600"
+          v-text="getTagsFromString(currentDir?.name || '').join(', ')"
+        />
+      </div>
       <div class="flex gap-2">
         <div class="animate-spin" v-if="currentDirEntriesLoading">
           <app-icon class="-scale-x-100" name="AirplaneRotation" />
@@ -88,6 +110,34 @@ const dirThumbSrc = computed(
           <app-icon name="Folder" />
         </button>
       </div>
+    </div>
+    <div
+      v-if="showFilter && tagFilterOptions.length"
+      class="flex flex-wrap gap-2 bg-black/50 px-4 py-2 text-gray-400 backdrop-blur"
+    >
+      <button
+        v-for="tag in tagFilterOptions"
+        :key="tag"
+        class="rounded-full px-2 text-sm"
+        :class="isTagInFilter(tag) ? 'bg-amber-700 text-amber-100' : 'bg-slate-800 text-slate-400'"
+        @click="toggleTag(tag)"
+        v-text="tag"
+      />
+      <button
+        class="rounded-full border px-2 text-sm"
+        :class="
+          isUntaggedActive ? 'border-amber-700 text-amber-300' : 'border-slate-800 text-slate-600'
+        "
+        @click="toggleUntagged()"
+        v-text="tagFilter.length ? '+ Untagged' : 'Untagged'"
+      />
+      <button
+        v-if="tagFilter.length || isUntaggedActive"
+        class="text-sm text-slate-500"
+        @click="resetTagFilter"
+      >
+        clear
+      </button>
     </div>
   </header>
   <div

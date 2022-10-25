@@ -1,10 +1,12 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 import slugify from 'slugify';
-import type router from '@/router';
+import { getTagsFromString, removeTagsFromString } from '@/features/useDirFilter';
 
 interface CurrentDirEntryBase {
   handle: FileSystemHandle;
+  displayName: string;
+  tags: string[];
   file: false | File;
   isActive: boolean;
   isDir: boolean;
@@ -92,6 +94,8 @@ export const setupDirEntries = async (dir: FileSystemDirectoryHandle) => {
         entries.push({
           handle: entry,
           file,
+          displayName: removeTagsFromString(entry.name),
+          tags: getTagsFromString(entry.name),
           type: getFileType(file.type, entry.name),
           mime: file.type,
           isActive: false,
@@ -101,6 +105,8 @@ export const setupDirEntries = async (dir: FileSystemDirectoryHandle) => {
       } else {
         entries.push({
           handle: entry,
+          displayName: removeTagsFromString(entry.name),
+          tags: getTagsFromString(entry.name),
           file: false,
           type: 'dir',
           isActive: false,

@@ -105,7 +105,7 @@ const icon = computed(() => {
     </div>
     <div
       class="truncate rounded bg-gray-800 p-2 text-sm leading-none text-gray-500 group-hover:bg-gray-700/50"
-      v-text="entry.handle.name"
+      v-text="entry.displayName"
       :title="entry.handle.name"
     />
   </button>
