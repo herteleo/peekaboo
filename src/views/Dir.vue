@@ -69,7 +69,7 @@ watch(readmeEntry, async (entry) => {
 });
 
 const dirThumbEntry = computed(() =>
-  getDirCoverEntry(currentDirEntries.value, currentDir.value?.name || '')
+  getDirCoverEntry(currentDirEntries.value, removeTagsFromString(currentDir.value?.name || ''))
 );
 const dirThumbSrc = computed(
   () => dirThumbEntry.value?.isFile && URL.createObjectURL(dirThumbEntry.value.file)

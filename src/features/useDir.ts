@@ -1,6 +1,5 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
-import slugify from 'slugify';
 import { getTagsFromString, removeTagsFromString } from '@/features/useDirFilter';
 
 interface CurrentDirEntryBase {
@@ -53,11 +52,8 @@ export const getDirCoverEntry = (
   entries: CurrentDirEntry[],
   dirName: string
 ): CurrentDirEntry | undefined => {
-  const dirNameSlugged = slugify(dirName, { lower: true });
-
   const cover = entries.find(
-    (e) =>
-      e.type === 'image' && e.file.name.toLowerCase().replace(/\.[^/.]+$/, '') === dirNameSlugged
+    (e) => e.type === 'image' && e.displayName.replace(/\.[^/.]+$/, '') === dirName
   );
   if (cover) return cover;
 };

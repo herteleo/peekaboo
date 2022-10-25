@@ -38,7 +38,7 @@ const getDirPreview = async () => {
 
   const entries = await setupDirEntries(props.entry.handle);
 
-  const coverEntry = getDirCoverEntry(entries, props.entry.handle.name);
+  const coverEntry = getDirCoverEntry(entries, props.entry.displayName);
   if (coverEntry?.isFile) return setFileAsImage(coverEntry.file);
 
   const firstImage = getFirstImageEntry(entries);
