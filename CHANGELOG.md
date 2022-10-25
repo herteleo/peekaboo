@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.0](https://github.com/herteleo/peekaboo/compare/v1.1.0...v1.2.0) (2022-10-25)
+
+
+### Features
+
+* add tags filter for directory entries ([6bf7b61](https://github.com/herteleo/peekaboo/commit/6bf7b612f4744470c90042c0138fe2235767e9ad))
+* add text filter for directory entries ([36d7580](https://github.com/herteleo/peekaboo/commit/36d7580036d8fb0034f38a50bd0c5fdcc3d1b470))
+* use image named like the folder as cover ([eee008e](https://github.com/herteleo/peekaboo/commit/eee008e07dd297589c8fe24027187505a93282aa))
+
 ## [1.1.0](https://github.com/herteleo/peekaboo/compare/v1.0.1...v1.1.0) (2022-07-01)
 
 
