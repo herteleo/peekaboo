@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.0](https://github.com/herteleo/peekaboo/compare/v1.2.0...v1.3.0) (2022-11-02)
+
+
+### Features
+
+* add exclude tags filter for directory entries ([cd38e64](https://github.com/herteleo/peekaboo/commit/cd38e64ee9e1a7ebbda3c40cc99d4743e01ee860))
+* display compatibility hint ([261be53](https://github.com/herteleo/peekaboo/commit/261be532144b0e36ce1dd083468bbd3cb6eea9fb))
+* improve browse button design ([6e456d7](https://github.com/herteleo/peekaboo/commit/6e456d7ba9445f0f1955697c4d05bddfbe9e23d4))
+
 ## [1.2.0](https://github.com/herteleo/peekaboo/compare/v1.1.0...v1.2.0) (2022-10-25)
 
 
