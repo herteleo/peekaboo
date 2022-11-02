@@ -29,10 +29,14 @@ export interface CurrentDirEntryFile extends CurrentDirEntryBase {
   mime: string;
 }
 
+export const isFileSystemApiAvailable = ref('showDirectoryPicker' in window);
+
 const rootDir = ref<FileSystemDirectoryHandle>();
 export const currentDir = ref<FileSystemDirectoryHandle>();
 
 export const setRootDir = async () => {
+  if (!isFileSystemApiAvailable.value) return;
+
   rootDir.value = await window.showDirectoryPicker();
   currentDir.value = rootDir.value;
 };

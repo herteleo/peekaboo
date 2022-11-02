@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import useDir, { setRootDir } from '@/features/useDir';
+import useDir, { setRootDir, isFileSystemApiAvailable } from '@/features/useDir';
 import { displayName, version } from '@/../package.json';
 
 useDir();
@@ -13,6 +13,9 @@ useDir();
           <app-icon class="mx-auto opacity-60" name="Folder" size="128" />
           <div class="text-xl capitalize">Click to browse your local files in the browser</div>
           <div class="opacity-30">Because why not. Your local files stay private.</div>
+          <div v-if="!isFileSystemApiAvailable" class="pt-2 text-sm text-amber-600">
+            Sadly your browser is not supported.<br />Try the latest Chrome Browser.
+          </div>
         </div>
       </button>
       <div class="text-sm opacity-20">
