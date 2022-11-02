@@ -1,4 +1,4 @@
-import { computed, ref, type Ref } from 'vue';
+import { computed, reactive, ref, type Ref } from 'vue';
 import type { CurrentDirEntry } from '@/features/useDir';
 
 const showFilter = ref(false);
@@ -9,16 +9,29 @@ const toggleFilter = () => {
 
 const stringFilter = ref('');
 
-const tagFilter = ref<Array<string>>([]);
+const tagFilter = reactive<Record<'include' | 'exclude', Array<string>>>({
+  include: [],
+  exclude: [],
+});
 
-const isTagInFilter = (tag: string) => tagFilter.value.includes(tag);
+const isTagFilterActive = computed(() => tagFilter.include.length || tagFilter.exclude.length);
 
-const toggleTag = (tag: string) => {
-  if (isTagInFilter(tag)) {
-    tagFilter.value = tagFilter.value.filter((t) => t !== tag);
+const isTagInFilter = (tag: string, mode: keyof typeof tagFilter) => tagFilter[mode].includes(tag);
+
+const removeTag = (tag: string, mode: keyof typeof tagFilter) => {
+  tagFilter[mode] = tagFilter[mode].filter((t) => t !== tag);
+};
+
+const toggleTag = (tag: string, mode: keyof typeof tagFilter) => {
+  if (isTagInFilter(tag, mode)) {
+    removeTag(tag, mode);
     return;
   }
-  tagFilter.value.push(tag);
+
+  if (mode === 'exclude' && isTagInFilter(tag, 'include')) removeTag(tag, 'include');
+  if (mode === 'include' && isTagInFilter(tag, 'exclude')) removeTag(tag, 'exclude');
+
+  tagFilter[mode].push(tag);
 };
 
 const isUntaggedActive = ref(false);
@@ -28,7 +41,8 @@ const toggleUntagged = () => {
 };
 
 const resetTagFilter = () => {
-  tagFilter.value = [];
+  tagFilter.include = [];
+  tagFilter.exclude = [];
   isUntaggedActive.value = false;
 };
 
@@ -60,7 +74,7 @@ const useDirFilter = (dirEntries: Ref<CurrentDirEntry[]>) => {
       .flat()
       .sort();
 
-    return [...new Set([...tags, ...tagFilter.value].sort())];
+    return [...new Set([...tags, ...tagFilter.include, ...tagFilter.exclude].sort())];
   });
 
   const filteredDirEntries = computed(() => {
@@ -73,8 +87,10 @@ const useDirFilter = (dirEntries: Ref<CurrentDirEntry[]>) => {
       let hasMatchingTags = false;
       let show = hasMatchingString;
 
-      if (hasMatchingString && tagFilter.value.length) {
-        hasMatchingTags = tagFilter.value.every((t) => tags.includes(t));
+      if (hasMatchingString && isTagFilterActive.value) {
+        hasMatchingTags =
+          tagFilter.include.every((t) => tags.includes(t)) &&
+          !tagFilter.exclude.some((t) => tags.includes(t));
         show = hasMatchingTags;
       }
 
@@ -96,6 +112,7 @@ const useDirFilter = (dirEntries: Ref<CurrentDirEntry[]>) => {
     stringFilter,
 
     getTagsFromString,
+    isTagFilterActive,
     isTagInFilter,
     isUntaggedActive,
     removeTagsFromString,

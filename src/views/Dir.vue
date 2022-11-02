@@ -23,10 +23,10 @@ const {
   stringFilter,
 
   getTagsFromString,
+  isTagFilterActive,
   isTagInFilter,
   removeTagsFromString,
   resetTagFilter,
-  tagFilter,
   tagFilterOptions,
   toggleTag,
   isUntaggedActive,
@@ -119,8 +119,14 @@ const dirThumbSrc = computed(
         v-for="tag in tagFilterOptions"
         :key="tag"
         class="rounded-full px-2 text-sm"
-        :class="isTagInFilter(tag) ? 'bg-amber-700 text-amber-100' : 'bg-slate-800 text-slate-400'"
-        @click="toggleTag(tag)"
+        :class="{
+          'bg-amber-700 text-amber-100': isTagInFilter(tag, 'include'),
+          'bg-slate-900 text-slate-400 line-through': isTagInFilter(tag, 'exclude'),
+          'bg-slate-800 text-slate-400':
+            !isTagInFilter(tag, 'include') && !isTagInFilter(tag, 'exclude'),
+        }"
+        @click="toggleTag(tag, 'include')"
+        @contextmenu.prevent="toggleTag(tag, 'exclude')"
         v-text="tag"
       />
       <button
@@ -129,10 +135,10 @@ const dirThumbSrc = computed(
           isUntaggedActive ? 'border-amber-700 text-amber-300' : 'border-slate-800 text-slate-600'
         "
         @click="toggleUntagged()"
-        v-text="tagFilter.length ? '+ Untagged' : 'Untagged'"
+        v-text="isTagFilterActive ? '+ Untagged' : 'Untagged'"
       />
       <button
-        v-if="tagFilter.length || isUntaggedActive"
+        v-if="isTagFilterActive || isUntaggedActive"
         class="text-sm text-slate-500"
         @click="resetTagFilter"
       >

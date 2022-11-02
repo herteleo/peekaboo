@@ -23,6 +23,7 @@ Open a local folder and explore your files inside the browser. Your files stay p
   IMG001 [2021, Berlin].jpg
   IMG002 [2022, New York].jpg
   ```
+  Right-click tags in filter to exclude entries with the respective tag from the list.
 - Place an image file named like the folder to define a permanent cover/thumbnail. Example:
   - Folder name: `Wallpapers`
   - Image inside folder: `Wallpapers.jpg`
