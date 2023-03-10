@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/herteleo/peekaboo/compare/v1.3.0...v1.4.0) (2023-03-10)
+
+
+### Features
+
+* use `README.md` files as source for tags ([aea41af](https://github.com/herteleo/peekaboo/commit/aea41af75f1f2652523d1dc7a163547a2e7daae1))
+
 ## [1.3.0](https://github.com/herteleo/peekaboo/compare/v1.2.0...v1.3.0) (2022-11-02)
 
 
