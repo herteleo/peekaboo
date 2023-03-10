@@ -9,6 +9,7 @@ import useDir, {
   currentDirEntriesLoading,
   getDirCoverEntry,
   reloadCurrentDir,
+  resolveReadmeData,
 } from '@/features/useDir';
 import useDirFilter from '@/features/useDirFilter';
 
@@ -42,12 +43,8 @@ const toggleFilterHelper = async () => {
   $stringFilter.value?.focus();
 };
 
-const readmeEntry = computed(() =>
-  currentDirEntries.value.find(
-    (e) => e.type === 'markdown' && e.file.name.toLowerCase() === 'readme.md'
-  )
-);
 const readmeContent = ref('');
+const readmeTags = ref<string[]>([]);
 
 const renderer = new marked.Renderer();
 const linkRenderer = renderer.link;
@@ -59,14 +56,25 @@ renderer.link = (href, title, text) => {
     : html.replace(/^<a /, `<a target="_blank" rel="noreferrer noopener nofollow" `);
 };
 
-watch(readmeEntry, async (entry) => {
-  if (!entry || !entry.isFile) {
-    readmeContent.value = '';
-    return;
-  }
+watch(
+  currentDir,
+  async (dir) => {
+    if (!dir) {
+      readmeContent.value = '';
+      return;
+    }
 
-  readmeContent.value = marked.parse(await entry.file.text(), { headerIds: false, renderer });
-});
+    const { content, frontmatter: { tags } = {} } = await resolveReadmeData(dir);
+
+    readmeContent.value = marked.parse(content, { headerIds: false, renderer });
+    readmeTags.value = Array.isArray(tags) ? tags.map((t) => String(t)) : [];
+  },
+  { immediate: true }
+);
+
+const dirTags = computed(() => [
+  ...new Set([...readmeTags.value, ...getTagsFromString(currentDir.value?.name || '')].sort()),
+]);
 
 const dirThumbEntry = computed(() =>
   getDirCoverEntry(currentDirEntries.value, removeTagsFromString(currentDir.value?.name || ''))
@@ -83,10 +91,7 @@ const dirThumbSrc = computed(
     >
       <div class="flex flex-wrap items-baseline gap-4">
         <span v-text="removeTagsFromString(currentDir?.name || '')" />
-        <span
-          class="text-sm text-slate-600"
-          v-text="getTagsFromString(currentDir?.name || '').join(', ')"
-        />
+        <span class="text-sm text-slate-600" v-text="dirTags.join(', ')" />
       </div>
       <div class="flex gap-2">
         <div class="animate-spin" v-if="currentDirEntriesLoading">

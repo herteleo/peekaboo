@@ -1,3 +1,4 @@
+import { parse, type Result } from 'ultramatter';
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 import { getTagsFromString, removeTagsFromString } from '@/features/useDirFilter';
@@ -74,6 +75,19 @@ const currentDirEntriesFiles = computed(() => currentDirEntries.value.filter((e)
 
 export const currentDirEntriesLoading = ref(false);
 
+export const resolveReadmeData = async (
+  directoryHandle: FileSystemDirectoryHandle
+): Promise<Result> => {
+  try {
+    const file = await directoryHandle.getFileHandle('README.md');
+    const contents = await (await file.getFile()).text();
+
+    return parse(contents);
+  } catch (error) {
+    return { content: '' };
+  }
+};
+
 export const setupDirEntries = async (dir: FileSystemDirectoryHandle) => {
   const entries: CurrentDirEntry[] = [];
 
@@ -103,10 +117,13 @@ export const setupDirEntries = async (dir: FileSystemDirectoryHandle) => {
           isFile: true,
         });
       } else {
+        const { tags } = (await resolveReadmeData(entry)).frontmatter || {};
+        const readmeTags = Array.isArray(tags) ? tags.map((t) => String(t)) : [];
+
         entries.push({
           handle: entry,
           displayName: removeTagsFromString(entry.name),
-          tags: getTagsFromString(entry.name),
+          tags: [...new Set([...readmeTags, ...getTagsFromString(entry.name)].sort())],
           file: false,
           type: 'dir',
           isActive: false,

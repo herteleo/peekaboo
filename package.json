@@ -32,6 +32,7 @@
     "highlight.js": "^11.4.0",
     "iconoir": "^1.0.0",
     "marked": "^4.0.12",
+    "ultramatter": "^0.0.4",
     "vue": "^3.2.41",
     "vue-router": "^4.1.5"
   },

@@ -16,13 +16,23 @@ Open a local folder and explore your files inside the browser. Your files stay p
 - Install Peekaboo as PWA. It works offline too.
 - Add a `README.md` file to display its contents above the listed directory entries.
 - Filter current directory entries by search term.
-- Filter files and folders in current directory by tag. Add tags (comma separated) in square brackets at the end of the file or folder name. Examples:
-  ```
-  Wallpapers [Dark, Space]
-  Wallpapers [Abstract, Dark]
-  IMG001 [2021, Berlin].jpg
-  IMG002 [2022, New York].jpg
-  ```
+- Filter files and folders in current directory by tag.
+  - Add a `README.md` file with frontmatter (including a `tags` property) to the desired directory. File contents example:
+    ```markdown
+    ---
+    tags: [Dark, Space]
+    ---
+    # Space Wallpapers
+
+    Here are my dark wallpapers from space.
+    ```
+  - Or add tags (comma separated) in square brackets at the end of the file or folder name. Examples:
+    ```
+    Wallpapers [Dark, Space] (will probably be deprecated)
+    Wallpapers [Abstract, Dark] (will probably be deprecated)
+    IMG001 [2021, Berlin].jpg
+    IMG002 [2022, New York].jpg
+    ```
   Right-click tags in filter to exclude entries with the respective tag from the list.
 - Place an image file named like the folder to define a permanent cover/thumbnail. Example:
   - Folder name: `Wallpapers`
