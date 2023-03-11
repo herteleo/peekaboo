@@ -27,8 +27,7 @@
     "commit-msg": "commitlint -e"
   },
   "dependencies": {
-    "@vueuse/components": "^7.5.1",
-    "@vueuse/core": "^7.5.1",
+    "@vueuse/core": "^9.13.0",
     "highlight.js": "^11.4.0",
     "iconoir": "^1.0.0",
     "marked": "^4.0.12",
