@@ -75,16 +75,27 @@ const currentDirEntriesFiles = computed(() => currentDirEntries.value.filter((e)
 
 export const currentDirEntriesLoading = ref(false);
 
+export const writeToFileInDir = async (
+  directoryHandle: FileSystemDirectoryHandle,
+  content: FileSystemWriteChunkType,
+  file: { name: string; create?: boolean }
+) => {
+  const fileHandle = await directoryHandle.getFileHandle(file.name, { create: file.create });
+  const writable = await fileHandle.createWritable();
+  await writable.write(content);
+  await writable.close();
+};
+
 export const resolveReadmeData = async (
   directoryHandle: FileSystemDirectoryHandle
-): Promise<Result> => {
+): Promise<{ content: string; parsed: Result } | undefined> => {
   try {
     const file = await directoryHandle.getFileHandle('README.md');
-    const contents = await (await file.getFile()).text();
+    const content = await (await file.getFile()).text();
 
-    return parse(contents);
+    return { content, parsed: parse(content) };
   } catch (error) {
-    return { content: '' };
+    return undefined;
   }
 };
 
@@ -117,7 +128,8 @@ export const setupDirEntries = async (dir: FileSystemDirectoryHandle) => {
           isFile: true,
         });
       } else {
-        const { tags } = (await resolveReadmeData(entry)).frontmatter || {};
+        const { frontmatter = {} } = (await resolveReadmeData(entry))?.parsed || {};
+        const { tags } = frontmatter;
         const readmeTags = Array.isArray(tags) ? tags.map((t) => String(t)) : [];
 
         entries.push({

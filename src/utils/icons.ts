@@ -1,5 +1,7 @@
+export * as AddCircle from 'iconoir/icons/add-circled-outline.svg?component';
 export * as AreaSearch from 'iconoir/icons/area-search.svg?component';
 export * as AirplaneRotation from 'iconoir/icons/airplane-rotation.svg?component';
+export * as EditPencil from 'iconoir/icons/edit-pencil.svg?component';
 export * as EmptyPage from 'iconoir/icons/empty-page.svg?component';
 export * as Filter from 'iconoir/icons/filter.svg?component';
 export * as Folder from 'iconoir/icons/folder.svg?component';

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { marked } from 'marked';
-import { computed, nextTick, ref, watch } from 'vue';
+import { computed, nextTick, ref } from 'vue';
+import { useTextareaAutosize, watchTriggerable } from '@vueuse/core';
 import DirEntry from '@/components/DirEntry.vue';
 import useDir, {
   setRootDir,
@@ -10,6 +11,7 @@ import useDir, {
   getDirCoverEntry,
   reloadCurrentDir,
   resolveReadmeData,
+  writeToFileInDir,
 } from '@/features/useDir';
 import useDirFilter from '@/features/useDirFilter';
 
@@ -43,6 +45,7 @@ const toggleFilterHelper = async () => {
   $stringFilter.value?.focus();
 };
 
+const readmeData = ref<Awaited<ReturnType<typeof resolveReadmeData>>>();
 const readmeContent = ref('');
 const readmeTags = ref<string[]>([]);
 
@@ -56,7 +59,7 @@ renderer.link = (href, title, text) => {
     : html.replace(/^<a /, `<a target="_blank" rel="noreferrer noopener nofollow" `);
 };
 
-watch(
+const { trigger: triggerCurrentDirWatcher } = watchTriggerable(
   currentDir,
   async (dir) => {
     if (!dir) {
@@ -64,13 +67,17 @@ watch(
       return;
     }
 
-    const { content, frontmatter: { tags } = {} } = await resolveReadmeData(dir);
+    readmeData.value = await resolveReadmeData(dir);
+    const { content, frontmatter = {} } = readmeData.value?.parsed || {};
+    const { tags } = frontmatter;
 
-    readmeContent.value = marked.parse(content, { headerIds: false, renderer });
+    readmeContent.value = marked.parse(content || '', { headerIds: false, renderer });
     readmeTags.value = Array.isArray(tags) ? tags.map((t) => String(t)) : [];
   },
   { immediate: true }
 );
+
+const dirName = computed(() => removeTagsFromString(currentDir.value?.name || ''));
 
 const dirTags = computed(() => [
   ...new Set([...readmeTags.value, ...getTagsFromString(currentDir.value?.name || '')].sort()),
@@ -82,6 +89,33 @@ const dirThumbEntry = computed(() =>
 const dirThumbSrc = computed(
   () => dirThumbEntry.value?.isFile && URL.createObjectURL(dirThumbEntry.value.file)
 );
+
+const { textarea: $readmeTextarea, input: readmeInput } = useTextareaAutosize();
+
+const editReadme = ref(false);
+
+const openReadmeEditor = async () => {
+  if (!currentDir.value) return;
+
+  const currentReadmeData = await resolveReadmeData(currentDir.value);
+  readmeInput.value = currentReadmeData?.content || `---\ntags: []\n---\n# ${dirName.value}`;
+
+  editReadme.value = true;
+};
+
+const saveReadme = async () => {
+  if (!currentDir.value) return;
+
+  await writeToFileInDir(currentDir.value, readmeInput.value, { name: 'README.md', create: true });
+
+  if (!readmeData.value) {
+    reloadCurrentDir();
+  }
+
+  triggerCurrentDirWatcher();
+
+  editReadme.value = false;
+};
 </script>
 
 <template>
@@ -89,9 +123,13 @@ const dirThumbSrc = computed(
     <div
       class="flex items-center justify-between bg-black/75 px-4 py-1 text-gray-400 backdrop-blur"
     >
-      <div class="flex flex-wrap items-baseline gap-4">
-        <span v-text="removeTagsFromString(currentDir?.name || '')" />
-        <span class="text-sm text-slate-600" v-text="dirTags.join(', ')" />
+      <div class="flex flex-wrap items-center gap-4">
+        <span v-text="dirName" />
+        <span v-if="dirTags.length" class="text-sm text-slate-600" v-text="dirTags.join(', ')" />
+        <button class="flex items-center gap-1 text-sm text-slate-600" @click="openReadmeEditor">
+          <app-icon :name="readmeData ? 'EditPencil' : 'AddCircle'" size="18" />
+          README.md
+        </button>
       </div>
       <div class="flex gap-2">
         <div class="animate-spin" v-if="currentDirEntriesLoading">
@@ -193,4 +231,33 @@ const dirThumbSrc = computed(
       <DirEntry v-for="entry in filteredDirEntries" :key="entry.handle.name" :entry="entry" />
     </div>
   </template>
+
+  <form
+    v-if="editReadme"
+    class="fixed inset-0 grid place-items-center bg-black/50 backdrop-blur-lg"
+    method="post"
+    @submit.prevent="saveReadme"
+    @reset.prevent="editReadme = !editReadme"
+  >
+    <div
+      class="flex max-h-full min-h-[60vh] w-full max-w-screen-lg flex-col gap-4 overflow-auto bg-slate-900 p-8 shadow-2xl"
+      @click.stop
+    >
+      <h2>README.md</h2>
+      <textarea
+        class="w-full grow resize-none rounded bg-black/50 p-4 font-mono focus:outline focus:outline-slate-600"
+        ref="$readmeTextarea"
+        v-model="readmeInput"
+      />
+      <div class="flex items-center justify-center gap-8">
+        <button
+          class="rounded bg-teal-600 px-4 py-1 hover:bg-teal-400 hover:text-teal-900"
+          type="submit"
+        >
+          Save
+        </button>
+        <button type="reset">Cancel</button>
+      </div>
+    </div>
+  </form>
 </template>
