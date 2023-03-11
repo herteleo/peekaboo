@@ -130,7 +130,7 @@ export const setupDirEntries = async (dir: FileSystemDirectoryHandle) => {
       } else {
         const { frontmatter = {} } = (await resolveReadmeData(entry))?.parsed || {};
         const { tags } = frontmatter;
-        const readmeTags = Array.isArray(tags) ? tags.map((t) => String(t)) : [];
+        const readmeTags = Array.isArray(tags) ? tags.filter(Boolean).map((t) => String(t)) : [];
 
         entries.push({
           handle: entry,

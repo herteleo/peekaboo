@@ -72,7 +72,7 @@ const { trigger: triggerCurrentDirWatcher } = watchTriggerable(
     const { tags } = frontmatter;
 
     readmeContent.value = marked.parse(content || '', { headerIds: false, renderer });
-    readmeTags.value = Array.isArray(tags) ? tags.map((t) => String(t)) : [];
+    readmeTags.value = Array.isArray(tags) ? tags.filter(Boolean).map((t) => String(t)) : [];
   },
   { immediate: true }
 );
