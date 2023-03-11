@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/herteleo/peekaboo/compare/v1.4.0...v1.5.0) (2023-03-11)
+
+
+### Features
+
+* add `README.md` editor to maintain directory tags and header contents ([177748c](https://github.com/herteleo/peekaboo/commit/177748c45d62a93605efe864bf4d00d4e41a41ea))
+
+
+### Bug Fixes
+
+* prevent display of `0` if tags array in `README.md` is empty ([5498a47](https://github.com/herteleo/peekaboo/commit/5498a4701f8350a0eedadeef7e43309be8b0ab74))
+
 ## [1.4.0](https://github.com/herteleo/peekaboo/compare/v1.3.0...v1.4.0) (2023-03-10)
 
 
